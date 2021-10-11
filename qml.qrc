@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>Viewer.qml</file>
+        <file>Browser.qml</file>
     </qresource>
 </RCC>

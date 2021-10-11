@@ -6,8 +6,12 @@ Window {
     height: 480
     visible: true
 
-    Viewer {
+//    Viewer {
+//        anchors.fill: parent
+//        source: "file:///home/patz/Keep/Gallerby/Gustave Doré/Divine Comedy 1.png"
+//    }
+    Browser {
         anchors.fill: parent
-        source: "file:///home/patz/Keep/Gallerby/Gustave Doré/Divine Comedy 1.png"
+        path: "file:///home/patz/"
     }
 }
