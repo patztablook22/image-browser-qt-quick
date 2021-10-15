@@ -1,9 +1,12 @@
 import QtQuick 2.0
 import Qt.labs.folderlistmodel 2.12
+import QtQuick.Layouts 1.12
+import QtQuick.Controls 2.12
 
 Rectangle {
     id: browser
-    property string path
+    property string path: path
+    property int viewing: 0
     property int size: 100
     property int columns: Math.round(width / size)
 
@@ -11,14 +14,18 @@ Rectangle {
     color: "black"
 
     onPathChanged: {
-        console.log(path)
+        console.log("browser source: " + path)
     }
 
     FolderListModel {
         id: folder
         showDotAndDotDot: true
         showDirsFirst: true
-        folder: browser.path
+        folder: "file://" + path
+    }
+
+    Viewer {
+        id: viewer
     }
 
     Component {
@@ -78,7 +85,18 @@ Rectangle {
                 id: mouse
                 anchors.fill: parent
                 onClicked: {
-                    browser.path = "file://" + filePath
+                    if (fileName === "..") {
+                        path = folder.parentFolder.toString().split("file://")[1]
+                    } else if (fileName === ".") {
+                    } else if (fileIsDir) {
+                        path = filePath
+                    } else if (!isImage()) {
+                    } else {
+                        // open Viewer
+//                        viewer.source = filePath
+//                        viewer.open()
+                        viewer.openFor(filePath)
+                    }
                 }
                 hoverEnabled: true
             }
@@ -86,13 +104,20 @@ Rectangle {
         }
     }
 
-    GridView {
-        id: grid
+    ScrollView {
         anchors.fill: parent
-        model: folder
-        delegate: file
-        boundsBehavior: Flickable.StopAtBounds
-        cellWidth: browser.width / browser.columns
-        cellHeight: cellWidth + 20
+        ScrollBar.vertical.policy: ScrollBar.AsNeeded
+        ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        clip: true
+
+        GridView {
+            anchors.fill: parent
+            model: folder
+            delegate: file
+            cellWidth: browser.width / browser.columns
+            cellHeight: cellWidth + 20
+            boundsBehavior: Flickable.StopAtBounds
+        }
     }
+
 }
