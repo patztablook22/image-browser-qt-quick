@@ -22,21 +22,10 @@ ApplicationWindow {
 
     Browser {
         id: browser
-        path: HOME_PATH
+        dir: HOME_PATH
         // `HOME_PATH` registered in main.cpp
     }
 
-    statusBar: StatusBar {
-        id: statusbar
-            Text {
-                text: browser.path
-            }
-
-            Slider {
-                orientation: Qt.Horizontal
-                anchors.right: parent.right
-            }
-
-    }
+    statusBar: Status {}
 
 }

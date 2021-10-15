@@ -87,7 +87,7 @@ Popup {
                         top: parent.top
                         topMargin: 10
                         rightMargin: 10
-                        bottomMargin: parent.width / 5
+                        bottomMargin: viewer.height / 2
                 }
 
                 from: 0.1

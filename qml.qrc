@@ -4,5 +4,7 @@
         <file>Viewer.qml</file>
         <file>Browser.qml</file>
         <file>Map.qml</file>
+        <file>FileDelegate.qml</file>
+        <file>Status.qml</file>
     </qresource>
 </RCC>
