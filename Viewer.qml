@@ -34,6 +34,11 @@ Popup {
                 open()
         }
 
+        onClosed: {
+            source = ""
+            inner.source = ""
+        }
+
         function zoomCenter() {
                 var zoomPoint = Qt.point(flickArea.width/2 + flickArea.contentX,
                                          flickArea.height/2 + flickArea.contentY);
