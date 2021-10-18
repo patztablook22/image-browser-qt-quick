@@ -8,11 +8,13 @@ Popup {
         width: parent.width
         height: parent.height
         clip: true
+        focus: true
         closePolicy: Popup.CloseOnEscape
         padding: 0
 
         function openFor(src) {
                 source = src
+                inner.source = "file://" + source
 
                 let tmp = Math.min(
                     viewer.width  / inner.width,
@@ -56,11 +58,11 @@ Popup {
                 boundsBehavior: Flickable.StopAtBounds
                 contentHeight: inner.height
                 contentWidth: inner.width
-                Image {
+                AnimatedImage {
                         id: inner
                         scale: zoom
                         anchors.centerIn: parent
-                        source: "file://" + viewer.source
+                        playing: (status == AnimatedImage.Ready)
                 }
 
                 MouseArea {
@@ -101,7 +103,7 @@ Popup {
         }
 
         Map {
-            container: flickArea
+                container: flickArea
         }
 
 }
