@@ -8,6 +8,7 @@ ApplicationWindow {
     height: 480
     visible: true
 
+    // Windows 95 theme init :cringe:
     menuBar: MenuBar {
         Menu {
             title: "&File"

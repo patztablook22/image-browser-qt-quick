@@ -1,6 +1,12 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 
+/*
+ * FileDelegate
+ * displays a single file/directory icon etc.
+ *
+ */
+
 Component {
     id: file
 
@@ -19,7 +25,9 @@ Component {
                     }
             }
 
+            // hover effect
             color: mouse.containsMouse ? "gray" : "transparent"
+
             width: Math.floor(browser.width / browser.columns)
             height: width + text.height
 
@@ -78,6 +86,8 @@ Component {
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: {
                             if (mouse.button == Qt.RightButton) {
+                                    if (!fileIsDir && !isImage())
+                                        return;
                                     // just open the context menu
                                     contextMenu.x = mouseX
                                     contextMenu.y = mouseY
@@ -88,6 +98,8 @@ Component {
                     }
                     hoverEnabled: true
 
+                    // context menu
+                    // dunno what to put there, but whatever
                     Menu {
                             id: contextMenu
                             Action {

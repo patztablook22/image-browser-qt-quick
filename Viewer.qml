@@ -19,15 +19,17 @@ Popup {
                     viewer.height / inner.height
                 );
 
-                // adjust image zoom only if the image is high resolution (keep low-resolution images small)
+                // high resolution picture -> zoom out so that one sees the whole thing
+                // lor resolution picture -> keep it small so that it's not Terraria
+
                 if (tmp < 1)
                     zoom = tmp
                 else
                     zoom = 1
 
-                // open the popup
-                open()
+                // open the view
                 zoomCenter()
+                open()
         }
 
         function zoomCenter() {
@@ -74,11 +76,12 @@ Popup {
                         preventStealing: false
                 }
 
-                // the rebound aniation zooming "jerky", turn it off
+                // the rebound animation makes zooming "jerky", get rid of it
                 rebound: Transition {}
         }
 
         Slider {
+                // zoom-adjusting slider because why not
                 id: slider
                 orientation: Qt.Vertical
                 anchors {

@@ -1,14 +1,27 @@
 import QtQuick 2.15
 
+/*
+ * This object displays a "map" of the image as it is currently viewed
+ * ona can click/drag the inner rectangle to navigate through the image being viewed
+ *
+ * `outer` represents the image (and should have appropriate aspect ratio)
+ * `inner` represents the viewing screen (-//-)
+ */
+
 Rectangle {
     id: outer
-    property Flickable container
+
+    required property Flickable container
+
+    // position and size the map
     anchors.bottom: parent.bottom
     anchors.right: parent.right
     anchors.bottomMargin: 10
     anchors.rightMargin: 10
     height: container.height / 5
     width: height * container.imageAspectRatio
+
+    // some theming
     radius: 8
     color: "#aa444444"
 
@@ -31,10 +44,14 @@ Rectangle {
 
     ]
 
+    // </theming>
+
     Rectangle {
             id: inner
             color: "#bb777777"
             radius: 8
+
+            // mafs
             x: parent.width * container.contentX / container.contentWidth
             width: Math.min(parent.width * container.width / container.contentWidth, parent.width)
             y: parent.height * container.contentY / container.contentHeight
@@ -53,21 +70,33 @@ Rectangle {
             onMouseXChanged: {
                     if (!pressed)
                             return
+
+                    // more mafs
                     let tmp = (mouseX - inner.width / 2) / outer.width * container.contentWidth
+
+                    // set up limits
                     if (tmp < 0)
                             tmp = 0
                     else if (tmp > container.contentWidth - container.width)
                             tmp = container.contentWidth - container.width
+
+                    // adjust the view
                     container.contentX = tmp
             }
             onMouseYChanged: {
                     if (!pressed)
                             return
+
+                    // EVEN MOAR MAFS
                     let tmp = (mouseY - inner.height / 2) / outer.height * container.contentHeight
+
+                    // set up limits
                     if (tmp < 0)
                             tmp = 0
                     else if (tmp > container.contentHeight - container.height)
                             tmp = container.contentHeight - container.height
+
+                    // adjust the view
                     container.contentY = tmp
             }
     }
