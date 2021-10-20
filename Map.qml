@@ -68,35 +68,27 @@ Rectangle {
             // dragging is annoying
             // this works just with clicking and/or holding:
             onMouseXChanged: {
-                    if (!pressed)
-                            return
+                    if (!pressed) return
 
-                    // more mafs
                     let tmp = (mouseX - inner.width / 2) / outer.width * container.contentWidth
 
-                    // set up limits
                     if (tmp < 0)
                             tmp = 0
                     else if (tmp > container.contentWidth - container.width)
                             tmp = container.contentWidth - container.width
 
-                    // adjust the view
                     container.contentX = tmp
             }
             onMouseYChanged: {
-                    if (!pressed)
-                            return
+                    if (!pressed) return
 
-                    // EVEN MOAR MAFS
                     let tmp = (mouseY - inner.height / 2) / outer.height * container.contentHeight
 
-                    // set up limits
                     if (tmp < 0)
                             tmp = 0
                     else if (tmp > container.contentHeight - container.height)
                             tmp = container.contentHeight - container.height
 
-                    // adjust the view
                     container.contentY = tmp
             }
     }
