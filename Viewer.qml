@@ -2,7 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 2.12
 
 Popup {
-        id: viewer
+        id: root
         property string source
         property real zoom: 1
         width: parent.width
@@ -17,8 +17,8 @@ Popup {
                 inner.source = "file://" + source
 
                 let tmp = Math.min(
-                    viewer.width  / inner.width,
-                    viewer.height / inner.height
+                    root.width  / inner.width,
+                    root.height / inner.height
                 );
 
                 // high resolution picture -> zoom out so that one sees the whole thing
@@ -44,8 +44,8 @@ Popup {
                                          flickArea.height/2 + flickArea.contentY);
 
                 flickArea.resizeContent(
-                    Math.max(inner.width * zoom, viewer.width),
-                    Math.max(inner.height * zoom, viewer.height),
+                    Math.max(inner.width * zoom, root.width),
+                    Math.max(inner.height * zoom, root.height),
                     zoomPoint
                 );
                 flickArea.returnToBounds();
@@ -73,12 +73,12 @@ Popup {
                 MouseArea {
                         anchors.fill: parent
                         onWheel: {
-                                let tmp = viewer.zoom + wheel.angleDelta.y / 1000
+                                let tmp = root.zoom + wheel.angleDelta.y / 1000
                                 if (tmp < 0.1)
                                         tmp = 0.1
                                 else if (tmp > 5)
                                         tmp = 5
-                                viewer.zoom = tmp
+                                root.zoom = tmp
                         }
                         preventStealing: false
                 }
@@ -97,14 +97,14 @@ Popup {
                         top: parent.top
                         topMargin: 10
                         rightMargin: 10
-                        bottomMargin: viewer.height / 2
+                        bottomMargin: root.height / 2
                 }
 
                 from: 0.1
                 to: 5
 
-                value: viewer.zoom
-                onValueChanged: viewer.zoom = value
+                value: root.zoom
+                onValueChanged: root.zoom = value
         }
 
         Map {

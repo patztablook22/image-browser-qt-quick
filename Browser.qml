@@ -4,12 +4,11 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 Rectangle {
-    id: browser
+    id: root
 
     /*
      * `dir` holds directory being browsed
-     * `activePath` holds opened dir or file
-     * `viewing` says whether the viewer is opened or not
+     * `activePath` holds currently opened dir **OR** file
      * `size` holds reference delegate width
      *        it is only reference as it will be adjusted to fit the total width of the browser
      * `columns` holds the number of grid columns (calculated from total width and icon width, see `size`)
@@ -17,7 +16,6 @@ Rectangle {
 
     property string dir
     property string activePath: dir
-    property bool   viewing: viewer.opened
     property int    size: 100
     property int    columns: Math.round(width / size)
 
@@ -25,9 +23,6 @@ Rectangle {
     color: "black"
 
     FolderListModel {
-        // list of entries in `dir`
-        // directories first, files afterwards
-
         id: folder
         showDotAndDotDot: true
         showDirsFirst: true
@@ -35,7 +30,6 @@ Rectangle {
     }
 
     Viewer {
-        // image viewer, opened after triggering `FileDelegate`
         id: viewer
         onClosed: activePath = dir
     }
@@ -47,11 +41,23 @@ Rectangle {
         clip: true
 
         GridView {
+            id: grid
             // list the entries
             anchors.fill: parent
             model: folder
-            delegate: FileDelegate {}
-            cellWidth: Math.floor(browser.width / browser.columns)
+            delegate: FileDelegate {
+                onOpen: {
+                    if (isImage) {
+                        viewer.openFor(path)
+                        activePath = path
+                    } else if (isDir){
+                        dir = path
+                        grid.contentY = 0
+                    } else {
+                    }
+                }
+            }
+            cellWidth: Math.floor(root.width / root.columns)
             cellHeight: cellWidth + 20
             boundsBehavior: Flickable.StopAtBounds
         }

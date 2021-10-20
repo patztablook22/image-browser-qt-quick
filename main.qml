@@ -17,7 +17,6 @@ ApplicationWindow {
                 shortcut: "ctrl+q"
                 onTriggered: Qt.quit()
             }
-
         }
     }
 
@@ -27,6 +26,8 @@ ApplicationWindow {
         // `HOME_PATH` registered in main.cpp
     }
 
-    statusBar: Status {}
+    statusBar: Status {
+        activePath: browser.activePath
+    }
 
 }

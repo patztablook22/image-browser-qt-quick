@@ -3,9 +3,10 @@ import QtQuick.Controls 1.3
 
 StatusBar {
         id: statusbar
+        property alias activePath: text.text
 
         // just display the active path, idk what else
         Text {
-                text: browser.activePath
+            id: text
         }
 }

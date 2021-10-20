@@ -7,107 +7,106 @@ import QtQuick.Controls 2.12
  *
  */
 
-Component {
-    id: file
+Item {
+        id: root
+        signal open();
 
-    Rectangle {
-            clip: true
+        property string path: {
+                if (fileName === ".") {
+                        return filePath.slice(0, -1)
+                } else if (fileName === "..") {
+                        return filePath.split("/").slice(0, -2).join("/") + "/"
+                } else if (isDir) {
+                        return filePath + "/"
+                } else {
+                        return filePath
+                }
+        }
 
-            function isImage() {
-                    switch (fileSuffix) {
-                    case "png":
-                    case "jpg":
-                    case "jpeg":
-                    case "gif":
-                            return true
-                    default:
-                            return false
-                    }
-            }
+        property bool isImage: {
+                switch (fileSuffix) {
+                case "png":
+                case "jpg":
+                case "jpeg":
+                case "gif":
+                        return true
+                default:
+                        return false
+                }
+        }
 
-            // hover effect
-            color: mouse.containsMouse ? "gray" : "transparent"
+        property bool isDir: fileIsDir
 
-            width: Math.floor(browser.width / browser.columns)
-            height: width + text.height
+        Rectangle {
+                clip: true
 
-            Item {
-                    anchors.fill: parent
-                    anchors.margins: 10
+                // hover effect
+                color: mouse.containsMouse ? "gray" : "transparent"
 
-                    Image {
-                            x: 0
-                            y: 0
-                            width: parent.width
-                            height: width
-                            fillMode: Image.PreserveAspectFit
-                            asynchronous: true
-                            source: {
-                                    if (fileIsDir)
-                                            "qrc:/icons/folder.png"
-                                    else if (isImage())
-                                            "file://" + filePath
-                                    else
-                                            "qrc:/icons/file.png"
-                            }
-                    }
+                width: Math.floor(browser.width / browser.columns)
+                height: width + text.height
 
-                    Text {
-                            id: text
-                            anchors.bottom: parent.bottom
-                            x: 10
-                            width: parent.width - 20
-                            color: "white"
-                            text: fileName
-                            elide: Text.ElideRight
-                    }
-            }
+                Item {
+                        anchors.fill: parent
+                        anchors.margins: 10
 
-            function open() {
+                        Image {
+                                x: 0
+                                y: 0
+                                width: parent.width
+                                height: width
+                                fillMode: Image.PreserveAspectFit
+                                asynchronous: true
+                                source: {
+                                        if (isDir) {
+                                                "qrc:/icons/folder.png"
+                                        } else if (isImage) {
+                                                "file://" + filePath
+                                        } else {
+                                                "qrc:/icons/file.png"
+                                        }
+                                }
+                        }
 
-                    if (fileName === "..") {
-                            dir = folder.parentFolder.toString().split("file://")[1]
-                            browser.activePath = dir
-                    } else if (fileName === ".") {
-                    } else if (fileIsDir) {
-                            dir = filePath
-                            browser.activePath = dir
-                    } else if (!isImage()) {
-                    } else {
-                            // open Viewer
-                            viewer.openFor(filePath)
-                            browser.activePath = filePath
-                    }
-            }
+                        Text {
+                                id: text
+                                anchors.bottom: parent.bottom
+                                x: 10
+                                width: parent.width - 20
+                                color: "white"
+                                text: fileName
+                                elide: Text.ElideRight
+                        }
+                }
 
-            MouseArea {
-                    id: mouse
-                    anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: {
-                            if (mouse.button == Qt.RightButton) {
-                                    if (!fileIsDir && !isImage())
-                                        return;
-                                    // just open the context menu
-                                    contextMenu.x = mouseX
-                                    contextMenu.y = mouseY
-                                    contextMenu.open()
-                                    return
-                            }
-                            open()
-                    }
-                    hoverEnabled: true
+                MouseArea {
+                        id: mouse
+                        anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: {
+                                if (mouse.button === Qt.RightButton) {
+                                        if (!fileIsDir && !isImage)
+                                                return;
+                                        // just open the context menu
+                                        contextMenu.x = mouseX
+                                        contextMenu.y = mouseY
+                                        contextMenu.open()
+                                } else {
+                                        open()
+                                }
+                        }
+                        hoverEnabled: true
 
-                    // context menu
-                    // dunno what to put there, but whatever
-                    Menu {
-                            id: contextMenu
-                            Action {
-                                    text: "&Open"
-                                    onTriggered: open()
-                            }
-                    }
-            }
+                        // context menu
+                        // dunno what to put there, but whatever
+                        Menu {
+                                id: contextMenu
+                                Action {
+                                        text: "&Open"
+                                        onTriggered: open()
+                                }
+                        }
+                }
 
-    }
+        }
 }
